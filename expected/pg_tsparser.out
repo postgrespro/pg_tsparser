@@ -40,6 +40,9 @@ SELECT * FROM ts_parse('tsparser', '345 qwe@efd.r '' http://www.com/ http://aew.
     12 |  ' 
     14 | http://
      6 | www.com
+     1 | www
+    12 | .
+     1 | com
     12 | / 
     14 | http://
      5 | aew.werc.ewr/?ad=qwe&dw
@@ -51,6 +54,12 @@ SELECT * FROM ts_parse('tsparser', '345 qwe@efd.r '' http://www.com/ http://aew.
     18 | /?ad=qwe&dw
     12 |  
      6 | 2aew.werc.ewr
+     3 | 2aew
+    12 | .
+     6 | werc.ewr
+     1 | werc
+    12 | .
+     1 | ewr
     12 |  
     14 | http://
      5 | 3aew.werc.ewr/?ad=qwe&dw
@@ -59,6 +68,12 @@ SELECT * FROM ts_parse('tsparser', '345 qwe@efd.r '' http://www.com/ http://aew.
     12 |  
     14 | http://
      6 | 4aew.werc.ewr
+     3 | 4aew
+    12 | .
+     6 | werc.ewr
+     1 | werc
+    12 | .
+     1 | ewr
     12 |  
     14 | http://
      5 | 5aew.werc.ewr:8100/?
@@ -177,7 +192,7 @@ SELECT * FROM ts_parse('tsparser', '345 qwe@efd.r '' http://www.com/ http://aew.
     12 |  
     12 | <> 
      1 | qwerty
-(143 rows)
+(158 rows)
 
 -- Test text search configuration with parser
 CREATE TEXT SEARCH CONFIGURATION english_ts (
@@ -207,5 +222,17 @@ SELECT to_tsvector('english_ts', '12-abc');
         to_tsvector        
 ---------------------------
  '12':2 '12-abc':1 'abc':3
+(1 row)
+
+SELECT to_tsvector('english_ts', 'test.com');
+          to_tsvector          
+-------------------------------
+ 'com':3 'test':2 'test.com':1
+(1 row)
+
+SELECT to_tsvector('english_ts', 'test2.com');
+           to_tsvector           
+---------------------------------
+ 'com':3 'test2':2 'test2.com':1
 (1 row)
 

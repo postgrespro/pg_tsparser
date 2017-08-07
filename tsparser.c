@@ -171,6 +171,8 @@ typedef enum
 	TPS_InPort,
 	TPS_InHostFirstAN,
 	TPS_InHost,
+	TPS_InHostAsciiWord,
+	TPS_InHostNumWord,
 	TPS_InEmail,
 	TPS_InFileFirst,
 	TPS_InFileTwiddle,
@@ -1443,7 +1445,7 @@ static const TParserStateActionItem actionTPS_InHostDomainSecond[] = {
 };
 
 static const TParserStateActionItem actionTPS_InHostDomain[] = {
-	{p_isEOF, 0, A_BINGO | A_CLRALL, TPS_Base, HOST, NULL},
+	{p_isEOF, 0, A_BINGO | A_CLRALL, TPS_InHostAsciiWord, HOST, SpecialHyphen},
 	{p_isasclet, 0, A_NEXT, TPS_InHostDomain, 0, NULL},
 	{p_isdigit, 0, A_PUSH, TPS_InHost, 0, NULL},
 	{p_iseqC, ':', A_PUSH, TPS_InPortFirst, 0, NULL},
@@ -1454,7 +1456,22 @@ static const TParserStateActionItem actionTPS_InHostDomain[] = {
 	{p_isdigit, 0, A_POP, TPS_Null, 0, NULL},
 	{p_isstophost, 0, A_BINGO | A_CLRALL, TPS_InURLPathStart, HOST, NULL},
 	{p_iseqC, '/', A_PUSH, TPS_InFURL, 0, NULL},
-	{NULL, 0, A_BINGO | A_CLRALL, TPS_Base, HOST, NULL}
+	{NULL, 0, A_BINGO | A_CLRALL, TPS_InHostAsciiWord, HOST, SpecialHyphen}
+};
+
+static const TParserStateActionItem actionTPS_InHostAsciiWord[] = {
+	{p_isEOF, 0, A_BINGO, TPS_Base, ASCIIWORD, NULL},
+	{p_isasclet, 0, A_NEXT, TPS_Null, 0, NULL},
+	{p_isdigit, 0, A_NEXT, TPS_InHostNumWord, 0, NULL},
+	{p_isalpha, 0, A_NEXT, TPS_InWord, 0, NULL},
+	{p_isspecial, 0, A_NEXT, TPS_InWord, 0, NULL},
+	{NULL, 0, A_BINGO, TPS_Base, ASCIIWORD, NULL}
+};
+
+static const TParserStateActionItem actionTPS_InHostNumWord[] = {
+	{p_isEOF, 0, A_BINGO, TPS_Base, NUMWORD, NULL},
+	{p_isalnum, 0, A_NEXT, TPS_InHostNumWord, 0, NULL},
+	{NULL, 0, A_BINGO, TPS_Base, NUMWORD, NULL}
 };
 
 static const TParserStateActionItem actionTPS_InPortFirst[] = {
@@ -1782,6 +1799,8 @@ static const TParserStateAction Actions[] = {
 	TPARSERSTATEACTION(TPS_InPort),
 	TPARSERSTATEACTION(TPS_InHostFirstAN),
 	TPARSERSTATEACTION(TPS_InHost),
+	TPARSERSTATEACTION(TPS_InHostAsciiWord),
+	TPARSERSTATEACTION(TPS_InHostNumWord),
 	TPARSERSTATEACTION(TPS_InEmail),
 	TPARSERSTATEACTION(TPS_InFileFirst),
 	TPARSERSTATEACTION(TPS_InFileTwiddle),

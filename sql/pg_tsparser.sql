@@ -24,3 +24,5 @@ ALTER TEXT SEARCH CONFIGURATION english_ts
 SELECT to_tsvector('english_ts', 'pg_trgm');
 SELECT to_tsvector('english_ts', '12_abc');
 SELECT to_tsvector('english_ts', '12-abc');
+SELECT to_tsvector('english_ts', 'test.com');
+SELECT to_tsvector('english_ts', 'test2.com');
