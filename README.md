@@ -34,7 +34,7 @@ SELECT to_tsvector('english', 'rel-3.2-A') as def_parser,
 
 ## License
 
-This module available under the same license as
+This module available under the [license](LICENSE) similar to
 [PostgreSQL](http://www.postgresql.org/about/licence/).
 
 ## Installation
