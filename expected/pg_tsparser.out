@@ -237,6 +237,14 @@ SELECT to_tsvector('english_ts', 'test2.com');
 (1 row)
 
 -- Test non-ASCII symbols
+-- must have a UTF8 database
+SELECT getdatabaseencoding();
+ getdatabaseencoding 
+---------------------
+ UTF8
+(1 row)
+
+SET client_encoding TO 'UTF8';
 SELECT * from ts_parse('tsparser', 'аб_вгд 12_абв 12-абв абв.рф абв2.рф');
  tokid | token  
 -------+--------

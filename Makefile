@@ -8,6 +8,9 @@ DATA = pg_tsparser--1.0.sql
 PGFILEDESC = "pg_tsparser - parser for text search"
 
 REGRESS = pg_tsparser
+# We need a UTF8 database
+ENCODING = UTF8
+NO_LOCALE = 1
 
 ifdef USE_PGXS
 PG_CONFIG = pg_config
