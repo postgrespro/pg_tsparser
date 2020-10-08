@@ -1973,7 +1973,11 @@ typedef struct
 #undef USE_PHRASE_SEARCH
 #endif
 
+#if PG_VERSION_NUM >= 130000 
+static TSTernaryValue
+#else
 static bool
+#endif
 #ifdef USE_PHRASE_SEARCH
 checkcondition_HL(void *opaque, QueryOperand *val, ExecPhraseData *data)
 #else
@@ -1990,7 +1994,11 @@ checkcondition_HL(void *opaque, QueryOperand *val)
 		{
 			/* don't need to find all positions */
 			if (!data)
+#if PG_VERSION_NUM >= 130000 
+				return TS_YES;
+#else
 				return true;
+#endif
 
 			if (!data->pos)
 			{
@@ -2006,16 +2014,28 @@ checkcondition_HL(void *opaque, QueryOperand *val)
 			}
 		}
 #else
+#if PG_VERSION_NUM >= 130000 
+			return TS_YES;
+#else
 			return true;
+#endif
 #endif
 	}
 
 #ifdef USE_PHRASE_SEARCH
 	if (data && data->npos > 0)
+#if PG_VERSION_NUM >= 130000 
+		return TS_YES;
+#else
 		return true;
 #endif
+#endif
 
+#if PG_VERSION_NUM >= 130000 
+	return TS_NO;
+#else
 	return false;
+#endif
 }
 
 
