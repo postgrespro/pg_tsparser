@@ -269,6 +269,10 @@ typedef struct TParser
 	int			type;
 } TParser;
 
+#if PG_VERSION_NUM < 120000
+#define pg_strtoint32(value)	pg_atoi((value), sizeof(int32), 0)
+#endif
+
 
 /* forward decls here */
 static bool TParserGet(TParser *prs);
@@ -2533,13 +2537,13 @@ tsparser_headline(PG_FUNCTION_ARGS)
 		char	   *val = defGetString(defel);
 
 		if (pg_strcasecmp(defel->defname, "MaxWords") == 0)
-			max_words = pg_atoi(val, sizeof(int32), 0);
+			max_words = pg_strtoint32(val);
 		else if (pg_strcasecmp(defel->defname, "MinWords") == 0)
-			min_words = pg_atoi(val, sizeof(int32), 0);
+			min_words = pg_strtoint32(val);
 		else if (pg_strcasecmp(defel->defname, "ShortWord") == 0)
-			shortword = pg_atoi(val, sizeof(int32), 0);
+			shortword = pg_strtoint32(val);
 		else if (pg_strcasecmp(defel->defname, "MaxFragments") == 0)
-			max_fragments = pg_atoi(val, sizeof(int32), 0);
+			max_fragments = pg_strtoint32(val);
 		else if (pg_strcasecmp(defel->defname, "StartSel") == 0)
 			prs->startsel = pstrdup(val);
 		else if (pg_strcasecmp(defel->defname, "StopSel") == 0)
