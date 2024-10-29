@@ -312,7 +312,7 @@ TParserInit(char *str, int len)
 		pg_locale_t mylocale = 0;		/* TODO */
 
 		prs->usewide = true;
-#if PG_VERSION_NUM >= 160000
+#if PG_VERSION_NUM >= 150000 || (defined(PGPRO_STD) && PG_VERSION_NUM >= 120000)
 		if (database_ctype_is_c)
 #else
 		if (lc_ctype_is_c(DEFAULT_COLLATION_OID))
