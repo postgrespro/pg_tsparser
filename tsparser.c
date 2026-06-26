@@ -309,7 +309,11 @@ TParserInit(char *str, int len)
 	 */
 	if (prs->charmaxlen > 1)
 	{
+#if PG_VERSION_NUM >= 190000
+		locale_t mylocale = 0;		/* TODO */
+#else
 		pg_locale_t mylocale = 0;		/* TODO */
+#endif
 
 		prs->usewide = true;
 #if PG_VERSION_NUM >= 150000 || (defined(PGPRO_STD) && PG_VERSION_NUM >= 120000)
